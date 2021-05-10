@@ -1,0 +1,119 @@
+<div class="card mt-2 mb-2">
+    <div class="card-body">
+        <div>
+            <div class="d-flex">
+                <button class="btn btn-success" routerLink="/admin-panel">Back</button>
+                <div class="d-flex align-items-center pt-1 mr-2 ml-4">
+                    <label>Filter By:</label>
+                </div>
+                <div class="d-flex align-items-center p-2 mr-auto">
+                    <form [formGroup]="filterForm" (input)="getRestaurantMenu()"  class="form-inline my-2 my-lg-0" >
+                        <input class="form-control mr-sm-2" type="text" formControlName="name" placeholder="Name">
+                    </form>
+                </div>
+                <div class="d-flex align-items-center ml-auto p-2">
+                    <button type="button" class="btn btn-success " (click)="openModal(template)">Add Menu Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-2 mb-2">
+
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Calories</th>
+            <th scope="col">Vegetarian</th>
+            <th scope="col">Type</th>
+            <th scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="restaurantMenuItem">
+          <tr *ngFor="let item of restaurantMenuItem; index as i">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.price}}</td>
+            <td>{{item.calories}}</td>
+            <td>{{item.isVege ? 'Yes' : 'No'}}</td>
+            <td>{{item.mealType | mapMealType}}</td>
+            <td>
+                <button class="btn btn-outline-primary mr-2" (click)="openModal(template, item)">Edit</button>
+                <button class="btn btn-outline-danger" (click)="deleteMenuItem(item.id)">Delete</button>
+            </td>
+          </tr>
+         
+        </tbody>
+      </table>
+
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+  
+      <h4 class="modal-title pull-left">{{isEditMode ? 'Edit Menu Item' : 'Add Menu Item'}}</h4>
+      
+      <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+  
+      <form [formGroup]='menuItemForm'>
+          
+          <div class="form-group">
+              <label for="name">Meal Name</label>
+              <input type="text" class="form-control" formControlName="name" id="name">
+          </div>
+  
+          <div class="form-group">
+              <label for="address">Price</label>
+              <input type="text" class="form-control" formControlName="price" id="price">
+          </div>
+
+          <div class="form-group">
+            <label for="calories">Calories</label>
+            <input type="text" class="form-control" formControlName="calories" id="calories">
+        </div>
+  
+            <!-- <div class="form-group">
+              <label for="mealTypes">Meal Types</label>
+              <select class="form-control" formControlName="mealTypes" id="mealTypes">
+                  <option *ngFor="let mealType of mealTypesList" value="{{mealType}}">{{mealType | mapMealType}}</option>
+              </select>
+          </div>   -->
+
+          <div class="form-group">
+            <label for="mealType">Meal Types</label>
+            <select class="form-control" formControlName="mealType" id="mealType">
+                <option *ngFor="let mealType of mealTypesList" value="{{mealType}}">{{mealType | mapMealType}}</option>
+            </select>
+        </div>
+
+          <div class="form-check">
+              <input type="checkbox" class="form-check-input" formControlName="isVege" id="isVege">
+              <label class="form-check-label" for="isVege">Is Vegetarian</label>
+
+          </div>
+            
+          <div class="d-flex justify-content-end">
+                
+              <button type="button" class="btn btn-primary mt-2 mb-2" (click)="addMenuItem()">{{isEditMode ? 'Save' : 'Add Menu Item'}}</button>
+  
+          </div>
+                  
+  
+          
+  
+          
+      </form>
+  
+      
+    </div>
+  </ng-template>
